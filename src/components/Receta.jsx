@@ -3,7 +3,7 @@ import { ModalContext } from "./../context/ModalContext";
 import PropTypes from "prop-types";
 
 import Modal from "@material-ui/core/Modal";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, formatMs } from "@material-ui/core/styles";
 
 function getModalStyle() {
   const top = 50;
@@ -42,6 +42,23 @@ const Receta = ({ receta }) => {
 
   // Extraer valores del context
   const { informacion, setIdReceta, setInformacion } = useContext(ModalContext);
+
+  // Muestra y formatea los ingredientes
+  const mostrarIngredientes = (informacion) => {
+    let ingredientes = [];
+    for (let i = 1; i < 16; i++) {
+      if (informacion[`strIngredient${i}`]) {
+        ingredientes.push(
+          <li>
+            {" "}
+            {informacion[`strIngredient${i}`]} {informacion[`strMeasure${i}`]}
+          </li>
+        );
+      }
+    }
+
+    return ingredientes;
+  };
 
   return (
     <div className="col-md-4 mb-3">
@@ -84,6 +101,9 @@ const Receta = ({ receta }) => {
                 alt={informacion.strDrink}
                 className="img-fluid my-4"
               />
+
+              <h3>Ingredientes y cantidades</h3>
+              <ul>{mostrarIngredientes(informacion)}</ul>
             </div>
           </Modal>
         </div>
